@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# When this script runs, the following are true:
+#   WD = /autograder
+#  $WD/run_autograder    this file
+#  $WD/source/           extracted contents of autograder.zip
+#  $WD/submission/       this student's submission to be graded (could be single file, zipfile, etc)
+# The result of running this file should create:
+#  $WD/results/results.json
+
+# Note: see https://gradescope-autograders.readthedocs.io/en/latest/specs/ for the 
+# runtime environment, directory structure, etc
+
+# if student submitted a single .rb file, rename it
+mkdir lib
+mv submission lib/submission.rb
+
+# BUG: what if we need to run `bundle` or whatever on the student's submission?  the above only works when it is
+# pure ruby with no dependencies
+
+# run rspec *once*, requiring all the specfiles and all the student solution files
+rspec ./source/spec/*_spec.rb --require ./lib/*.rb --require ./source/rspec_gradescope_formatter.rb --format RSpecGradescopeFormatter
