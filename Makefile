@@ -4,10 +4,19 @@ NAME = assignment
 ZIP  = zip
 
 
-SPECFILES = $(wildcard spec/*)
-RUNFILES = run_autograder setup.sh
+FILES = $(wildcard spec/*) run_autograder setup.sh
 
 all: $(NAME).zip
 
-$(NAME).zip: $(SPECFILES) $(RUNFILES)
+$(NAME).zip: $(FILES)
 	$(ZIP) 
+
+.phony: localtest
+localtest: $(FILES)
+	mkdir -p autograder/source autograder/results
+	cp run_autograder autograder/
+	cp rspec_gradescope_formatter.rb autograder/source
+	cd autograder && ./run_autograder
+
+clean:
+	rm -rf autograder
