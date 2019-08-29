@@ -19,4 +19,4 @@ mv submission lib/submission.rb
 # pure ruby with no dependencies
 
 # run rspec *once*, requiring all the specfiles and all the student solution files
-rspec ./source/spec/*_spec.rb --require ./lib/*.rb --require ./source/rspec_gradescope_formatter.rb --format RSpecGradescopeFormatter
+rspec --require ./lib/*.rb --require ./source/rspec_gradescope_formatter.rb --format RSpecGradescopeFormatter  ./source/spec/*_spec.rb

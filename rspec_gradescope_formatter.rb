@@ -77,7 +77,7 @@ class RSpecGradescopeFormatter < RSpec::Core::Formatters::BaseTextFormatter
     # choose between pretty vs. uglified/compacted JSON here:
     output = JSON.pretty_generate(@results)
     # output = @results.to_json
-    File.open("results.json", "w") do |f|
+    File.open("results/results.json", "w") do |f|
       f.puts output
     end
   end
@@ -93,9 +93,9 @@ class RSpecGradescopeFormatter < RSpec::Core::Formatters::BaseTextFormatter
     if points_from_metadata && points_from_description
       # if they are equal, warning for example.metadata[:location] (file path + line num)
       if points_from_metadata == points_from_description
-        puts "#{example.metadata[:location]: points given in both metadata and example docstring"
+        puts "#{example.metadata[:location]}: points given in both metadata and example docstring"
       else
-        raise RuntimeError.new("#{example.metadata[:location]: points given in both metadata and example docstring, and they don't match")
+        raise RuntimeError.new("#{example.metadata[:location]}: points given in both metadata and example docstring, and they don't match")
       end
       points_from_metadata
     else
