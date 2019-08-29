@@ -89,7 +89,7 @@ class RSpecGradescopeFormatter < RSpec::Core::Formatters::BaseTextFormatter
     # if it has both and they match, issue a warning
     # if it has both and they don't match, issue an error
     points_from_metadata = example.metadata.has_key?(:points) ? example.metadata[:points].to_i : nil
-    points_from_description = example.description =~ /\[\s*(\d+)\s*points\s*\]\s*$/ ? $1.to_i : nil
+    points_from_description = example.description =~ /\[\s*(\d+)\s*points?\s*\]\s*$/ ? $1.to_i : nil
     if points_from_metadata && points_from_description
       # if they are equal, warning for example.metadata[:location] (file path + line num)
       if points_from_metadata == points_from_description

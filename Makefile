@@ -16,6 +16,7 @@ localtest: $(FILES)
 	mkdir -p autograder/source autograder/results
 	cp run_autograder autograder/
 	cp rspec_gradescope_formatter.rb autograder/source
+	cp -R spec autograder/source
 	cd autograder && ./run_autograder
 
 clean:
