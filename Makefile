@@ -10,7 +10,7 @@ FILES = $(wildcard spec/*) run_autograder setup.sh
 all: $(NAME).zip
 
 $(NAME).zip: $(FILES)
-	$(ZIP) $< setup.sh run_autograder spec
+	$(ZIP) $@ setup.sh run_autograder spec
 
 .PHONY: test
 test: localenv
@@ -24,7 +24,7 @@ localenv: $(FILES)
 	-rm -rf autograder
 	mkdir autograder && cd autograder && mkdir source submission
 	cp run_autograder autograder/
-	cp Makefile README.md dummy.rb rspec_gradescope_formatter.rb run_autograder setup.sh autograder/source
+	cp Makefile README.md $(SOLUTIONS) rspec_gradescope_formatter.rb run_autograder setup.sh autograder/source
 	cp -R spec autograder/source/
 	cp $(SOLUTIONS) autograder/submission/
 
