@@ -18,12 +18,15 @@ localtest: make_localenv
 
 .PHONY: make_localenv
 make_localenv: $(FILES)
-	mkdir -p autograder/source autograder/results
+	@echo 'Setting up environment to look like Gradescope docker container...'
+	-rm -rf autograder
+	mkdir autograder && cd autograder && mkdir source submission
 	cp run_autograder autograder/
-	chmod +x autograder/run_autograder
-	cp setup.sh run_autograder rspec_gradescope_formatter.rb autograder/source
-	cp -R spec autograder/source
-	cp dummy.rb autograder/submission
+	cp -R Makefile README.md dummy.rb rspec_gradescope_formatter.rb run_autograder setup.sh spec/ autograder/source
+	cp dummy.rb autograder/submission/
+	echo 'Grading dummy assignment with run_autograder...'
+	cd autograder && ./run_autograder
+	echo 'Done, check autograder/results/results.json for results'
 
 .PHONY: clean
 clean:
