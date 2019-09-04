@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Note: see https://gradescope-autograders.readthedocs.io/en/latest/specs/ for the 
+# runtime environment, directory structure, etc.
 # When this script runs, the following are true:
 #   WD = /autograder
 #  $WD/run_autograder    this file
@@ -8,15 +10,17 @@
 # The result of running this file should create:
 #  $WD/results/results.json
 
-# Note: see https://gradescope-autograders.readthedocs.io/en/latest/specs/ for the 
-# runtime environment, directory structure, etc
+# submission/  contains student's files;  source/spec/ contains rspec file(s)
+# rspec_gradescope_formatter tries to create results/results.json, so ensure results/ dir exists
+[ ! -d results ] && mkdir results
 
-# if student submitted a single .rb file, rename it
-mkdir lib
-mv submission lib/submission.rb
-
-# BUG: what if we need to run `bundle` or whatever on the student's submission?  the above only works when it is
-# pure ruby with no dependencies
+# BUG: what if we need to run `bundle` or whatever on the student's submission?
+# the above only works when it is pure ruby with no dependencies.  Ideally there should be
+# a way to specify a "before-script" here or something.
 
 # run rspec *once*, requiring all the specfiles and all the student solution files
-rspec --require ./lib/*.rb --require ./source/rspec_gradescope_formatter.rb --format RSpecGradescopeFormatter  ./source/spec/*_spec.rb
+rspec \
+    --require submission/*.rb \
+    --require source/rspec_gradescope_formatter.rb \
+    --format RSpecGradescopeFormatter  \
+    source/spec/*_spec.rb

@@ -32,8 +32,8 @@ order in which you want students to see results (e.g.,
 
 ## Package your spec files
 
-0. Use this repo as a template.  (Don't clone or fork it; make a new
-one based on these contents.)
+0. Use this repo as a template (click the green "Use as template"
+button above).  (This is different from clone or fork.)
 
 
 2. In the directory `spec`, place _all_ specfiles for the
