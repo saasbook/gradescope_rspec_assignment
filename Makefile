@@ -10,24 +10,25 @@ FILES = $(wildcard spec/*) run_autograder setup.sh
 all: $(NAME).zip
 
 $(NAME).zip: $(FILES)
-	$(ZIP) 
+	$(ZIP) $< setup.sh run_autograder spec
 
-.PHONY: localtest
-localtest: make_localenv
-	cd autograder && ./run_autograder
-
-.PHONY: make_localenv
-make_localenv: $(FILES)
-	@echo 'Setting up environment to look like Gradescope docker container...'
-	-rm -rf autograder
-	mkdir autograder && cd autograder && mkdir source submission
-	cp run_autograder autograder/
-	cp -R Makefile README.md dummy.rb rspec_gradescope_formatter.rb run_autograder setup.sh spec/ autograder/source
-	cp dummy.rb autograder/submission/
+.PHONY: test
+test: localenv
 	echo 'Grading dummy assignment with run_autograder...'
 	cd autograder && ./run_autograder
 	echo 'Done, check autograder/results/results.json for results'
 
+.PHONY: make_localenv
+localenv: $(FILES)
+	@echo 'Setting up environment to look like Gradescope docker container...'
+	-rm -rf autograder
+	mkdir autograder && cd autograder && mkdir source submission
+	cp run_autograder autograder/
+	cp Makefile README.md dummy.rb rspec_gradescope_formatter.rb run_autograder setup.sh autograder/source
+	cp -R spec autograder/source/
+	cp $(SOLUTIONS) autograder/submission/
+
 .PHONY: clean
 clean:
-	rm -rf autograder
+	-rm -rf autograder $(NAME).zip
+

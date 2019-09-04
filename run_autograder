@@ -20,7 +20,7 @@
 
 # run rspec *once*, requiring all the specfiles and all the student solution files
 rspec \
-    --require submission/*.rb \
-    --require source/rspec_gradescope_formatter.rb \
+    --require ./submission/*.rb \
+    --require ./source/rspec_gradescope_formatter.rb \
     --format RSpecGradescopeFormatter  \
     source/spec/*_spec.rb
