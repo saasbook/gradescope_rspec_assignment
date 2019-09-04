@@ -53,19 +53,19 @@ order in which you want students to see results (e.g.,
 
 ## Package your spec files and test things locally
 
-1. In the directory `spec`, place _all_ specfiles for the
+1. Make sure the directory `spec` contains _all_ specfiles for the
 assignment.  
 
 1. Say `make test SOLUTIONS=`_your-solutions-file_`.rb` to test things
 locally, where this file contains a reference solution to the assignment.
 This make target will create an
 `autograder` directory that looks like it will look on Gradescope and
-tries to run your specfiles against `dummy_reference_solution.rb`.
+tries to run your specfiles against that reference solution.
 You can inspect `autograder/results/results.json` to see if it looks
 good.
 
-1. If all looks good, `make NAME=`_assignment-name_ will make a
-zipfile that should have the right contents for Gradescope.
+1. If all looks good, `make` will create a
+zipfile that should have the right contents for uploading to Gradescope.
 
 1. `make clean` removes the temporary `autograder` directory and the
 zipfile.
