@@ -1,5 +1,18 @@
 # RSpec With Gradescope
 
+The files in this repo provide the necessary scaffolding to create
+a [Gradescope](https://gradescope.com)-compatible grader for 
+assignments graded solely on the basis of one or more RSpec specfiles.
+To summarize [how Gradescope autograding works](https://gradescope-autograders.readthedocs.io/en/latest/specs/):
+
+* Your create a zipfile that gets unzipped and "wakes up" in an instantiated Docker container with
+a well-known directory structure (this repo helps you do so)
+* You provide a script `setup.sh` that installs the necessary packages, libraries, etc. on which
+the autograder depends
+* You provide a script `run_autograder` that actually invokes the autograder
+* The autograder is expected to produce a JSON file with the results of the run,
+feedback for the student, etc.
+
 To create a Gradescope-compatible autograder for a programming
 assignment that is graded entirely on the basis of RSpec tests,
 structure the homework solutions repo as follows.
