@@ -1,17 +1,20 @@
 require 'rspec/core/formatters/base_text_formatter'
 require 'json'
+require 'fileutils'
+# require 'pry'
 
 # @see https://gradescope-autograders.readthedocs.io/en/latest/specs/
 
 class RSpecGradescopeFormatter < RSpec::Core::Formatters::BaseTextFormatter
 
   RSpec::Core::Formatters.register(self,
+    :example_group_started,     # describe, etc. Used for top level metadata
     :example_started,           # collect points from example name
     :example_passed,            # when example passes, record points earned
     :example_failed,            # when example fails, capture error message
     :example_pending,           # when example pending... (TBD)
     :close)                     # when run is over, emit JSON
-  # other hooks we don't use: example_group_started, example_group_finished, example_section_finished
+  # other hooks we don't use: example_group_finished, example_section_finished
 
   def initialize(output)
     @output = output
@@ -22,12 +25,19 @@ class RSpecGradescopeFormatter < RSpec::Core::Formatters::BaseTextFormatter
       # optional fields:
       # "score" => 0.0, # total; required if not on each test case below. Overrides total if specified.
       # "execution_time" => 0, #  seconds
-      # "output" => "Text relevant to the entire submission", 
+      # "output" => "Text relevant to the entire submission",
       # "visibility" => "after_due_date", # visibility setting
       # "stdout_visibility" => "visible", # stdout visibility setting, if tests write things on stdout
       # "extra_data" => {},     # Optional extra data to be stored
       "tests" => [ ]    # Optional, but required if no top-level score
     }
+  end
+
+  # TODO: validate values
+  def example_group_started(notification)
+    if notification.group.metadata[:stdout_visibility]
+      @results[:stdout_visibility] = notification.group.metadata[:stdout_visibility]
+    end
   end
 
   # @see https://www.rubydoc.info/gems/rspec-core/RSpec/Core/Notifications
@@ -57,7 +67,7 @@ class RSpecGradescopeFormatter < RSpec::Core::Formatters::BaseTextFormatter
       @results['tests'] << @current_test_case
     end
   end
-  
+
   def example_failed(notification)
     if @current_test_case
       fail_exception = notification.example.exception # the reason the test failed
@@ -71,17 +81,17 @@ class RSpecGradescopeFormatter < RSpec::Core::Formatters::BaseTextFormatter
     # make sure we DON'T even try to count this test case
     @current_test_case = nil
   end
-  
+
   def close(notification)
     # write all output to results.json
     # choose between pretty vs. uglified/compacted JSON here:
     output = JSON.pretty_generate(@results)
-    # output = @results.to_json
+    FileUtils.mkdir_p 'results'
     File.open("results/results.json", "w") do |f|
       f.puts output
     end
   end
-  
+
   private
   def extract_points(example)
     # if an example's metadata has :points => N, extract that.
@@ -103,4 +113,3 @@ class RSpecGradescopeFormatter < RSpec::Core::Formatters::BaseTextFormatter
     end
   end
 end
-
